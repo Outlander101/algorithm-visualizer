@@ -1,8 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import AppLayout from "./components/AppLayout";
 
-function App() {
-  return <AppLayout />;
-}
+const algorithm = [
+  "Bubble Sort",
+  "Quick Sort",
+  "Merge Sort",
+  "Dijkstra's Algorithm",
+];
 
-export default App;
+export default function App() {
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>("");
+
+  return (
+    <div className="flex flex-col h-screen">
+      {/* Header */}
+      <div className="bg-blue-600 text-white p-4 text-lg font-bold">Algorithm Visualizer</div>
+
+      {/* Layout */}
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <div className="w-64 bg-gray-100 p-4">
+          <h2 className="font-semibold mb-4">Algorithm</h2>
+          <ul>
+            {algorithm.map((algo) => (
+              <li
+                key={algo}
+                className={`cursor-pointer mb-2 ${
+                  selectedAlgorithm === algo ? "font-bold text-blue-600" : ""
+                }`}
+                onClick={() => setSelectedAlgorithm(algo)}
+              >
+                {algo}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Main Panel */}
+        <div className="flex-1 p-6 flex items-center justify-center text-gray-600 text-lg">
+          {selectedAlgorithm
+            ? `You selected: ${selectedAlgorithm}`
+            : "Select an algorithm to begin"}
+        </div>
+      </div>
+    </div>
+  );
+}
