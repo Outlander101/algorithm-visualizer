@@ -8,6 +8,9 @@ function App() {
 
   return (
     <div>
+    <div className="min-h-screen bg-gray-900 text-white flex items-top justify-center text-5xl font-bold">
+      🎉 Tailwind CSS is working!
+    </div>
       <Navbar onAlgorithmChange={setAlgorithm} />
       <Controls
         onPlay={() => console.log("play")}
