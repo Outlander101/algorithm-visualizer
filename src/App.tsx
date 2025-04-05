@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AppLayout from "./components/AppLayout";
+import BubbleSortVisualizer from "./algorithm/BubbleSort";
 
 const algorithm = [
   "Bubble Sort",
@@ -40,19 +41,8 @@ export default function App() {
         {/* Main Panel */}
         <div className="flex-1 p-6 flex items-center justify-center text-gray-600 text-lg">
           {selectedAlgorithm ? (
-            selectedAlgorithm.includes("Sort") ? (
-              <div className="flex items-end gap-1 h-full w-full justify-center">
-              {dummyArray.map((value, index) => (
-                <div
-                  key={index}
-                  className="bg-green-500"
-                  style={{
-                    height: `${value * 4}px`,
-                    width: "40px",
-                  }}
-                ></div>
-                  ))}
-              </div>
+            selectedAlgorithm === "Bubble Sort" ? (
+              <BubbleSortVisualizer />
             ) : (
               <p className="text-black text-lg">{selectedAlgorithm} visualization coming soon...</p>
             )
