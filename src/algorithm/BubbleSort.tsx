@@ -11,6 +11,8 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
   const [isSorting, setIsSorting] = useState(false);
   const [current, setCurrent] = useState<number | null>(null);
   const [next, setNext] = useState<number | null>(null);
+  const [maxValue, setMaxValue] = useState(100);
+
 
   useEffect(() => {
     setArray(generateRandomArray(arraySize, 100));
@@ -43,7 +45,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
 
   const resetArray = () => {
     if (!isSorting) {
-      setArray(generateRandomArray(30, 200));
+      setArray(generateRandomArray(arraySize, maxValue));
     }
   };
 
@@ -82,6 +84,19 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
           Reset Array
         </button>
       </div>
+      <div className="w-full max-w-2xl flex flex-col gap-2">
+      <label className="font-semibold">Max Bar Height: {maxValue}</label>
+      <input
+        type="range"
+        min={10}
+        max={300}
+        step={10}
+        value={maxValue}
+        disabled={isSorting}
+        onChange={(e) => setMaxValue(Number(e.target.value))}
+        className="w-full"
+      />
+    </div>
     </div>
   );
 }
