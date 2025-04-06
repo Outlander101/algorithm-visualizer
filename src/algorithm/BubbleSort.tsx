@@ -6,15 +6,15 @@ const generateRandomArray = (length: number, max: number) => {
   return Array.from({ length }, () => Math.floor(Math.random() * max));
 };
 
-export default function BubbleSortVisualizer() {
+export default function BubbleSortVisualizer({ arraySize }: { arraySize: number }) {
   const [array, setArray] = useState<number[]>([]);
   const [isSorting, setIsSorting] = useState(false);
   const [current, setCurrent] = useState<number | null>(null);
   const [next, setNext] = useState<number | null>(null);
 
   useEffect(() => {
-    setArray(generateRandomArray(20, 100));
-  }, []);
+    setArray(generateRandomArray(arraySize, 100));
+  }, [arraySize]);
 
   const bubbleSort = async () => {
     setIsSorting(true);
