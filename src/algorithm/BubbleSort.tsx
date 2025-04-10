@@ -12,6 +12,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
   const [current, setCurrent] = useState<number | null>(null);
   const [next, setNext] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState(100);
+  const [speed, setSpeed] = useState(1);
 
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
           setArray([...arr]);
         }
 
-        await sleep(150);
+        await sleep(500/speed);
       }
     }
 
@@ -84,6 +85,19 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
           Reset Array
         </button>
       </div>
+
+      <div className="mt-2">
+        <label className="font-black">Sorting Speed: {speed}x</label>
+        <input
+          type="range"
+          min="1"
+          max="8"
+          value={speed}
+          onChange={(e) => setSpeed(Number(e.target.value))}
+          className="w-full"
+        />
+      </div>
+
       <div className="w-full max-w-2xl flex flex-col gap-2">
       <label className="font-semibold">Max Bar Height: {maxValue}</label>
       <input
@@ -96,7 +110,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
         onChange={(e) => setMaxValue(Number(e.target.value))}
         className="w-full"
       />
-    </div>
+      </div>
     </div>
   );
 }
