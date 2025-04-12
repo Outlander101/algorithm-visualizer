@@ -13,6 +13,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
   const [next, setNext] = useState<number | null>(null);
   const [maxValue, setMaxValue] = useState(100);
   const [speed, setSpeed] = useState(1);
+  const [sortOrder, setsortOrder] = useState<'asc' | 'desc'>('asc');
 
 
   useEffect(() => {
@@ -28,7 +29,9 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
         setCurrent(j);
         setNext(j + 1);
 
-        if (arr[j] > arr[j + 1]) {
+        const swap =
+          sortOrder === 'asc' ? arr[j] > arr[j + 1] : arr[j] < arr[j + 1];
+        if (swap) {
           const temp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = temp;
@@ -84,6 +87,19 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
         >
           Reset Array
         </button>
+      </div>
+
+      <div className='w-full  max-w-2xl flex flex-col gap-2'>
+        <label className="font-black">Sort Order: </label>
+        <select
+          value={sortOrder}
+          onChange={(e) => setsortOrder(e.target.value as 'asc' | 'desc')}
+          disabled={isSorting}
+          className="border px-3 py-2 rounded"
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
       </div>
 
       <div className="mt-2">
