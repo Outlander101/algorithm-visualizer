@@ -14,15 +14,18 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
   const [maxValue, setMaxValue] = useState(100);
   const [speed, setSpeed] = useState(1);
   const [sortOrder, setsortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortedIndices, setSortedIndices] = useState<Set<number>>(new Set());
 
 
   useEffect(() => {
     setArray(generateRandomArray(arraySize, 100));
-  }, [arraySize]);
+    setSortedIndices(new Set());
+  }, [arraySize, maxValue]);
 
   const bubbleSort = async () => {
     setIsSorting(true);
     const arr = [...array];
+    const sortedSet = new Set<number>();
 
     for (let i = 0; i < arr.length; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
@@ -38,10 +41,13 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
           setArray([...arr]);
         }
 
-        await sleep(500/speed);
+        await sleep(200/speed);
       }
-    }
 
+      sortedSet.add(arr.length - 1 - i);
+      setSortedIndices(new Set(sortedSet));
+    }
+    
     setCurrent(null);
     setNext(null);
     setIsSorting(false);
@@ -50,6 +56,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
   const resetArray = () => {
     if (!isSorting) {
       setArray(generateRandomArray(arraySize, maxValue));
+      setSortedIndices(new Set());
     }
   };
 
@@ -58,19 +65,22 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
       <h1 className="text-3xl font-black">Bubble Sort Visualizer</h1>
 
       <div className="flex items-end h-full w-full max-w-4xl border p-2">
-        {array.map((value, idx) => (
-          <div
-            key={idx}
-            className={`mx-0.5 w-5 rounded-t ${
-              idx === current || idx === next
-                ? 'bg-red-500'
-                : 'bg-sky-400'
-            }`}
-            style={{ height: `${value * 2}px` }}
-          ></div>
-        ))}
+        {array.map((value, idx) => {
+          let barColor = "bg-sky-500";
+          if (sortedIndices.has(idx)) barColor = "bg-green-600";
+          else if(idx === current || idx === next) barColor = "bg-red-600";
+
+          return (
+            <div
+              key={idx}
+              className={`mx-0.5 w-5 rounded-t ${barColor}`}
+              style={{ height: `${value * 2}px` }}
+            ></div>
+          );
+        })}
       </div>
 
+      {/* Action Buttons */}
       <div className="flex gap-5">
         <button
           onClick={bubbleSort}
@@ -89,6 +99,7 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
         </button>
       </div>
 
+      {/* Controls */}
       <div className='w-full  max-w-2xl flex flex-col gap-2'>
         <label className="font-black">Sort Order: </label>
         <select
@@ -126,6 +137,28 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
         onChange={(e) => setMaxValue(Number(e.target.value))}
         className="w-full"
       />
+      </div>
+
+      {/* Color Legend */}
+      <div className="w-full max-w-2xl mt-4">
+        <h2 className="font-black mb-2">Color Legend</h2>
+        <div className="flex gap-3 text-sm">
+          <div className="flex font-black items-center gap-5">
+            <div className="w-11/12 h-4 bg-sky-500 rounded-sm">
+              Normal
+            </div>
+            <div className="flex font-black items-center gap-5">
+              <div className="w-11/12 h-5 bg-red-600 rounded-sm">
+                Comparing
+              </div>
+              <div className="flex font-black items-center gap-3">
+                <div className="w-12 h-5 bg-green-600 rounded-sm">
+                  Sorted
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
