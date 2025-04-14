@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -15,15 +15,38 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
   const [speed, setSpeed] = useState(1);
   const [sortOrder, setsortOrder] = useState<'asc' | 'desc'>('asc');
   const [sortedIndices, setSortedIndices] = useState<Set<number>>(new Set());
+  const [isPaused, setIsPaused] = useState(false);
+  const pauseResolve = useRef<(() => void) | null>(null);
+  const isPausedRef = useRef(isPaused);
 
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
 
   useEffect(() => {
     setArray(generateRandomArray(arraySize, 100));
     setSortedIndices(new Set());
   }, [arraySize, maxValue]);
 
+  const waitWhenPaused = () => {
+    if (!isPausedRef.current) return Promise.resolve();
+    return new Promise<void>((resolve) => {
+      pauseResolve.current = resolve;
+    });
+  };
+
+  const pauseOrResume = () => {
+    if (isPaused) {
+      setIsPaused(false);
+      if (pauseResolve.current) pauseResolve.current();
+    } else {
+      setIsPaused(true);
+    }
+  };
+
   const bubbleSort = async () => {
     setIsSorting(true);
+    setIsPaused(false);
     const arr = [...array];
     const sortedSet = new Set<number>();
 
@@ -42,12 +65,15 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
         }
 
         await sleep(200/speed);
+        await waitWhenPaused();
       }
 
       sortedSet.add(arr.length - 1 - i);
       setSortedIndices(new Set(sortedSet));
     }
     
+    sortedSet.add(0);
+    setSortedIndices(new Set(sortedSet));
     setCurrent(null);
     setNext(null);
     setIsSorting(false);
@@ -88,6 +114,14 @@ export default function BubbleSortVisualizer({ arraySize }: { arraySize: number 
           className="bg-green-600 text-white px-5 py-4 rounded disabled:opacity-60"
         >
           Start Sorting
+        </button>
+
+        <button
+          onClick={pauseOrResume}
+          disabled={!isSorting}
+          className="bg-yellow-600 text-white px-4 py-4 rounded disabled:opacity-65"
+        >
+          {isPaused? 'Resume' : 'Pause'}
         </button>
 
         <button
