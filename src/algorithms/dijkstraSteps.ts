@@ -50,7 +50,7 @@ export function dijkstraSteps(graph: GraphNode[], source: string, target: string
       currentNode,
       visited: Array.from(visited),
       distances: { ...distances },
-      path: previous[target] || currentNode === target ? reconstructPath(previous, target) : [],
+      path: (previous[target] || currentNode === target) ? reconstructPath(previous, target) : [],
     });
   }
 
