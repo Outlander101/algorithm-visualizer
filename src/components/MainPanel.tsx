@@ -1,26 +1,27 @@
 import BubbleSortVisualizer from "../algorithm/BubbleSort";
+import MergeSortVisualizer from "../algorithm/MergeSort";
+import QuickSortVisualizer from "../algorithm/QuickSort";
+import { AlgorithmId } from "../constants/algorithms";
+import GraphVisualizer from "./GraphVisualizer";
 
 interface MainPanelProps {
-  selectedAlgorithm: string;
+  selectedAlgorithm: AlgorithmId | null;
   arraySize: number;
 }
 
 export default function MainPanel({ selectedAlgorithm, arraySize }: MainPanelProps) {
-  const isSortingAlgo = selectedAlgorithm.includes("Sort");
+  if (!selectedAlgorithm) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-5 text-lg text-black">
+        Select an algorithm
+      </div>
+    );
+  }
 
-  return (
-    <div className="flex-1 p-5 flex items-center justify-center text-gray-500 text-lg">
-      {selectedAlgorithm ? (
-        isSortingAlgo ? (
-          <BubbleSortVisualizer arraySize={arraySize} />
-        ) : (
-          <p className="text-black text-lg">
-            {selectedAlgorithm} visualization coming soon...
-          </p>
-        )
-      ) : (
-        <p className="text-black text-lg">Select an algorithm</p>
-      )}
-    </div>
-  );
+  if (selectedAlgorithm === "bubble") return <BubbleSortVisualizer arraySize={arraySize} />;
+  if (selectedAlgorithm === "quick") return <QuickSortVisualizer arraySize={arraySize} />;
+  if (selectedAlgorithm === "merge") return <MergeSortVisualizer arraySize={arraySize} />;
+  if (selectedAlgorithm === "dijkstra") return <GraphVisualizer />;
+
+  return <div className="flex flex-1 items-center justify-center p-5 text-lg text-black">Unsupported algorithm</div>;
 }

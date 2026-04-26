@@ -2,18 +2,11 @@ import React, { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import MainPanel from "./components/MainPanel";
-
-const algorithm = [
-  "Bubble Sort",
-  "Quick Sort",
-  "Merge Sort",
-  "Dijkstra's Algorithm",
-];
+import { ALGORITHMS, AlgorithmId } from "./constants/algorithms";
 
 export default function App() {
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
-  const [arraySize, setArraySize] = useState(25); // default size
-
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<AlgorithmId | null>(null);
+  const [arraySize, setArraySize] = useState(25);
 
   return (
     <div className="flex flex-col h-screen">
@@ -22,7 +15,7 @@ export default function App() {
         <Sidebar
           selected={selectedAlgorithm}
           setSelected={setSelectedAlgorithm}
-          algorithms={algorithm}
+          algorithms={ALGORITHMS}
           arraySize={arraySize}
           setArraySize={setArraySize}
         />
