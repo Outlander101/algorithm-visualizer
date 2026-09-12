@@ -21,28 +21,48 @@ export default function Sidebar({
   setArraySize,
 }: SidebarProps) {
   return (
-    <div className="w-64 bg-gray-400 p-4">
-      <h2 className="font-semibold mb-4">Algorithm</h2>
-      <ul>
-        {algorithms.map((algo) => (
-          <li
-            key={algo.id}
-            className={`cursor-pointer mb-2 ${selected === algo.id ? "font-bold text-sky-600" : ""}`}
-            onClick={() => setSelected(algo.id)}
-          >
-            {algo.name}
-          </li>
-        ))}
+    <div className="h-full w-full flex flex-col p-8 pt-10 overflow-y-auto">
+      <div className="mb-10">
+        <h1 className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-teal-500 tracking-tight">
+          AlgoVis
+        </h1>
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-widest mt-1">Interactive Engine</p>
+      </div>
+      
+      <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-2">Select Algorithm</h2>
+      <ul className="flex flex-col gap-2">
+        {algorithms.map((algo) => {
+          const isSelected = selected === algo.id;
+          return (
+            <li
+              key={algo.id}
+              className={`cursor-pointer px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                isSelected 
+                  ? "bg-white shadow-md text-blue-600 transform scale-[1.02]" 
+                  : "text-gray-600 hover:bg-white/60 hover:text-gray-900"
+              }`}
+              onClick={() => setSelected(algo.id)}
+            >
+              {algo.name}
+            </li>
+          );
+        })}
       </ul>
-      <label className="block mt-6 mb-1 font-semibold">Array Size: {arraySize}</label>
-      <input
-        type="range"
-        min={5}
-        max={100}
-        value={arraySize}
-        onChange={(e) => setArraySize(Number(e.target.value))}
-        className="w-full"
-      />
+      
+      <div className="mt-auto pt-8">
+        <label className="flex justify-between items-center text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">
+          <span>Array Size</span>
+          <span className="bg-gray-200/80 text-gray-700 px-2 py-0.5 rounded-full">{arraySize}</span>
+        </label>
+        <input
+          type="range"
+          min={5}
+          max={100}
+          value={arraySize}
+          onChange={(e) => setArraySize(Number(e.target.value))}
+          className="w-full accent-blue-500 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+        />
+      </div>
     </div>
   );
 }
