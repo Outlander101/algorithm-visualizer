@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { dijkstraSteps } from "../algorithms/dijkstraSteps";
 import { DIJKSTRA_SOURCE, DIJKSTRA_TARGET, SAMPLE_GRAPH } from "./graph";
 
@@ -6,6 +6,8 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function GraphVisualizer() {
   const [speed, setSpeed] = useState(1);
+  const speedRef = useRef(1);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [running, setRunning] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
   const [visited, setVisited] = useState<string[]>([]);
@@ -13,12 +15,26 @@ export default function GraphVisualizer() {
   const [path, setPath] = useState<string[]>([]);
   const [distances, setDistances] = useState<Record<string, number>>({});
 
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
+
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) abortControllerRef.current.abort();
+    };
+  }, []);
+
   const steps = useMemo(
     () => dijkstraSteps(SAMPLE_GRAPH, DIJKSTRA_SOURCE, DIJKSTRA_TARGET),
     [],
   );
 
   const start = async () => {
+    if (abortControllerRef.current) abortControllerRef.current.abort();
+    abortControllerRef.current = new AbortController();
+    const { signal } = abortControllerRef.current;
+
     setRunning(true);
     setStepIndex(0);
     setVisited([]);
@@ -26,25 +42,28 @@ export default function GraphVisualizer() {
     setPath([]);
 
     for (let i = 0; i < steps.length; i += 1) {
+      if (signal.aborted) return;
       const step = steps[i];
       setStepIndex(i);
       setVisited(step.visited);
       setCurrentNode(step.currentNode);
       setPath(step.path);
       setDistances(step.distances);
-      await sleep(350 / speed);
+      await sleep(350 / speedRef.current);
+      if (signal.aborted) return;
     }
 
     setRunning(false);
   };
 
   const reset = () => {
-    if (running) return;
+    if (abortControllerRef.current) abortControllerRef.current.abort();
     setStepIndex(0);
     setVisited([]);
     setCurrentNode(null);
     setPath([]);
     setDistances({});
+    setRunning(false);
   };
 
   return (
@@ -109,7 +128,6 @@ export default function GraphVisualizer() {
         </button>
         <button
           onClick={reset}
-          disabled={running}
           className="rounded bg-gray-700 px-4 py-2 text-white disabled:opacity-60"
         >
           Reset

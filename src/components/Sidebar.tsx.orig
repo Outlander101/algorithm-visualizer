@@ -4,7 +4,6 @@ import { AlgorithmId } from "../constants/algorithms";
 interface AlgorithmOption {
   id: AlgorithmId;
   name: string;
-  requiresArraySize: boolean;
 }
 
 interface SidebarProps {
@@ -22,7 +21,7 @@ export default function Sidebar({
   arraySize,
   setArraySize,
 }: SidebarProps) {
-  const selectedAlgo = algorithms.find((a) => a.id === selected);
+  const isGraphAlgorithm = selected === "dijkstra" || selected === "city_dijkstra";
 
   return (
     <div className="h-full w-full flex flex-col p-8 pt-10 overflow-y-auto">
@@ -54,7 +53,7 @@ export default function Sidebar({
         })}
       </nav>
       
-      {selectedAlgo?.requiresArraySize && (
+      {!isGraphAlgorithm && (
         <div className="mt-auto pt-8">
           <label 
             htmlFor="arraySizeSlider" 

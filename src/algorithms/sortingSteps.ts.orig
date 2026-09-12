@@ -17,11 +17,9 @@ export function bubbleSortSteps(input: number[], order: SortOrder): SortStep[] {
   const sorted = new Set<number>();
 
   for (let i = 0; i < arr.length; i += 1) {
-    let swapped = false;
     for (let j = 0; j < arr.length - i - 1; j += 1) {
       if (shouldSwap(arr[j], arr[j + 1], order)) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        swapped = true;
       }
       steps.push({
         array: [...arr],
@@ -31,7 +29,6 @@ export function bubbleSortSteps(input: number[], order: SortOrder): SortStep[] {
       });
     }
     sorted.add(arr.length - i - 1);
-    if (!swapped) break;
   }
 
   steps.push(finalSorted(arr));
@@ -79,17 +76,6 @@ function quickSortRecursive(
   steps: SortStep[],
 ) {
   if (low < high) {
-    const randomPivotIndex = Math.floor(Math.random() * (high - low + 1)) + low;
-    if (randomPivotIndex !== high) {
-      [arr[randomPivotIndex], arr[high]] = [arr[high], arr[randomPivotIndex]];
-      steps.push({
-        array: [...arr],
-        current: randomPivotIndex,
-        next: high,
-        sortedIndices: [],
-      });
-    }
-
     const pi = partition(arr, low, high, order, steps);
     quickSortRecursive(arr, low, pi - 1, order, steps);
     quickSortRecursive(arr, pi + 1, high, order, steps);

@@ -103,7 +103,7 @@ export default function SortingVisualizer({ title, arraySize, stepGenerator }: S
 
   const pauseOrResume = () => {
     if (!isSorting) return;
-    if (isPausedRef.current) {
+    if (isPaused) {
       setIsPaused(false);
       isPausedRef.current = false;
       pauseResolverRef.current?.();

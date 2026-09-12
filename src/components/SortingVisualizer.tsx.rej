@@ -1,0 +1,12 @@
+--- SortingVisualizer.tsx
++++ SortingVisualizer.tsx
+@@ -29,6 +29,9 @@
+   useEffect(() => {
+     return () => {
+       if (abortControllerRef.current) {
+         abortControllerRef.current.abort();
+       }
++      if (pauseResolverRef.current) {
++        pauseResolverRef.current();
++      }
+     };

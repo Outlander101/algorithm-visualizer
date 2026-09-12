@@ -1,9 +1,13 @@
-import BubbleSortVisualizer from "../algorithm/BubbleSort";
-import MergeSortVisualizer from "../algorithm/MergeSort";
-import QuickSortVisualizer from "../algorithm/QuickSort";
+import React, { Suspense, lazy } from "react";
 import { AlgorithmId } from "../constants/algorithms";
-import GraphVisualizer from "./GraphVisualizer";
-import CityPathfinder from "./CityPathfinder";
+
+const BubbleSortVisualizer = lazy(() => import("../algorithm/BubbleSort"));
+const MergeSortVisualizer = lazy(() => import("../algorithm/MergeSort"));
+const QuickSortVisualizer = lazy(() => import("../algorithm/QuickSort"));
+const HeapSortVisualizer = lazy(() => import("../algorithm/HeapSort"));
+const InsertionSortVisualizer = lazy(() => import("../algorithm/InsertionSort"));
+const GraphVisualizer = lazy(() => import("./GraphVisualizer"));
+const CityPathfinder = lazy(() => import("./CityPathfinder"));
 
 interface MainPanelProps {
   selectedAlgorithm: AlgorithmId | null;
@@ -23,11 +27,24 @@ export default function MainPanel({ selectedAlgorithm, arraySize }: MainPanelPro
     );
   }
 
-  if (selectedAlgorithm === "bubble") return <BubbleSortVisualizer arraySize={arraySize} />;
-  if (selectedAlgorithm === "quick") return <QuickSortVisualizer arraySize={arraySize} />;
-  if (selectedAlgorithm === "merge") return <MergeSortVisualizer arraySize={arraySize} />;
-  if (selectedAlgorithm === "dijkstra") return <GraphVisualizer />;
-  if (selectedAlgorithm === "city_dijkstra") return <CityPathfinder />;
+  const renderComponent = () => {
+    if (selectedAlgorithm === "bubble") return <BubbleSortVisualizer arraySize={arraySize} />;
+    if (selectedAlgorithm === "quick") return <QuickSortVisualizer arraySize={arraySize} />;
+    if (selectedAlgorithm === "merge") return <MergeSortVisualizer arraySize={arraySize} />;
+    if (selectedAlgorithm === "heap") return <HeapSortVisualizer arraySize={arraySize} />;
+    if (selectedAlgorithm === "insertion") return <InsertionSortVisualizer arraySize={arraySize} />;
+    if (selectedAlgorithm === "dijkstra") return <GraphVisualizer />;
+    if (selectedAlgorithm === "city_dijkstra") return <CityPathfinder />;
+    return <div className="flex flex-1 items-center justify-center p-5 text-lg text-black">Unsupported algorithm</div>;
+  };
 
-  return <div className="flex flex-1 items-center justify-center p-5 text-lg text-black">Unsupported algorithm</div>;
+  return (
+    <Suspense fallback={
+      <div className="flex flex-1 items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      {renderComponent()}
+    </Suspense>
+  );
 }
