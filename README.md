@@ -6,7 +6,7 @@ AlgoVis provides a beautiful, fluid glassmorphism interface to explore how funda
 
 ## Features
 
-### City Pathfinding & Graph Routing (Phase 1)
+### City Pathfinding & Graph Routing
 Visualize how GPS software finds the shortest path between landmarks using real-world geographic data.
 - **Algorithms**: Dijkstra's Algorithm and A* Search.
 - **Heuristics**: A* utilizes the mathematical Haversine formula to calculate great-circle distances.
@@ -14,7 +14,7 @@ Visualize how GPS software finds the shortest path between landmarks using real-
 - **Metrics**: Live tracking of execution time (compute speed), nodes visited, and total path cost.
 - **Interactive UI**: Hover over map markers to see real locations (e.g. Times Square, Shinjuku Station).
 
-### Sorting Algorithms (Phase 2 - Ongoing)
+### Sorting Algorithms
 Visualize array sorting step-by-step.
 - **Algorithms**: Bubble Sort, Quick Sort, and Merge Sort.
 - **Controls**: Adjust the array size, sorting speed, and toggle between Ascending/Descending orders.
@@ -27,7 +27,7 @@ Make sure you have Node.js installed (v14 or higher recommended).
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/algorithm-visualizer.git
+git clone https://github.com/Outlander101/algorithm-visualizer.git
 cd algorithm-visualizer
 
 # Install dependencies
